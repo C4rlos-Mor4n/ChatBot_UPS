@@ -18,7 +18,7 @@ let RESPUESTAS_TEST = {};
 
 const flowPrincipal = addKeyword(EVENTS.WELCOME)
   .addAction(async (ctx, { flowDynamic, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName });
+    await state.update({ phone: ctx.from, name: ctx.pushName });
     const currentState = state.getMyState();
 
     const mensajesBienvenida = [
@@ -48,9 +48,8 @@ const flowPrincipal = addKeyword(EVENTS.WELCOME)
   .addAnswer(
     "*Instrucciones:*\nSelecciona la respuesta que mejor se ajuste a tus preferencias en cada pregunta. Al final del test, encontrarás una recomendación basada en tus elecciones.",
     null,
-    async (_, { gotoFlow, endFlow }) => {
-      await gotoFlow(flowPrimerPregunta);
-      return endFlow();
+    async (_, { gotoFlow }) => {
+      return gotoFlow(flowPrimerPregunta);
     }
   );
 
@@ -58,7 +57,11 @@ const flowPrimerPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Qué tipo de actividades te resultan más interesantes?*\n\na) Trabajar con números y análisis financiero.\nb) Diseñar edificios y espacios creativos.\nc) Investigar sobre diferentes culturas y sociedades.\nd) Realizar experimentos en un laboratorio.\ne) Programar y resolver problemas tecnológicos.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -77,7 +80,7 @@ const flowPrimerPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowSegundaPregunta);
+      return gotoFlow(flowSegundaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -88,7 +91,11 @@ const flowSegundaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*Si tuvieras que elegir un libro para leer, ¿cuál escogerías?*\n\na) Un libro sobre teorías económicas y modelos financieros.\nb) Una novela de ciencia ficción que inspire tu imaginación.\nc) Un libro que explique las tradiciones y costumbres de diferentes grupos étnicos.\nd) Un libro de medicina y avances biomédicos.\ne) Un libro de programación y desarrollo de software.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -108,7 +115,7 @@ const flowSegundaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowTerceraPregunta);
+      return gotoFlow(flowTerceraPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -119,7 +126,11 @@ const flowTerceraPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Cómo te describirías en términos de habilidades sociales?*\n\na) Excelente para comunicar y liderar a otros.\nb) Creativo y capaz de expresar tus ideas visualmente.\nc) Empático y dispuesto a entender diferentes puntos de vista.\nd) Preciso y meticuloso en tu trabajo.\ne) Bueno para resolver problemas de manera lógica.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -139,7 +150,7 @@ const flowTerceraPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowCuartaPregunta);
+      return gotoFlow(flowCuartaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -150,7 +161,11 @@ const flowCuartaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Qué te gustaría hacer en tu tiempo libre?*\n\na) Organizar y planificar eventos.\nb) Explorar nuevos lugares y apreciar la arquitectura.\nc) Participar en actividades comunitarias y aprender sobre diferentes culturas.\nd) Realizar investigaciones científicas en tu campo de interés.\ne) Programar aplicaciones y experimentar con nuevas tecnologías.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -169,7 +184,7 @@ const flowCuartaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowQuintaPregunta);
+      return gotoFlow(flowQuintaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -180,7 +195,11 @@ const flowQuintaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Cómo te sientes acerca de los desafíos matemáticos?*\n\na) Me encantan y se me dan muy bien.\nb) Puedo manejarlos, pero no son mi fuerte.\nc) Prefiero actividades que involucren más interacción humana.\nd) No me siento cómodo con ellos.\ne) Me siento cómodo usando la lógica y los números para resolver problemas.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -199,7 +218,7 @@ const flowQuintaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowSextaPregunta);
+      return gotoFlow(flowSextaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -210,7 +229,11 @@ const flowSextaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Qué te intriga más sobre el cuerpo humano?*\n\na) Cómo funcionan los sistemas económicos y financieros.\nb) Cómo se pueden diseñar estructuras únicas y estéticas.\nc) Cómo las diferentes culturas influyen en las interacciones humanas.\nd) Cómo las enfermedades afectan el cuerpo y cómo prevenirlas.\ne) Cómo la tecnología puede mejorar la atención médica.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -229,7 +252,7 @@ const flowSextaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowSeptimaPregunta);
+      return gotoFlow(flowSeptimaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -240,7 +263,11 @@ const flowSeptimaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Qué tipo de proyectos te gustaría liderar?*\n\na) Proyectos que involucren estrategias de negocios y administración.\nb) Proyectos de diseño arquitectónico y construcción.\nc) Proyectos que promuevan la diversidad y la inclusión.\nd) Proyectos de investigación científica para el avance de la medicina.\ne) Proyectos de desarrollo de software y tecnología.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -259,7 +286,7 @@ const flowSeptimaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowOctavaPregunta);
+      return gotoFlow(flowOctavaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -270,7 +297,11 @@ const flowOctavaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Cómo te sientes acerca de trabajar en equipo?*\n\na) Disfruto liderar equipos y tomar decisiones.\nb) Me gusta trabajar en equipo, pero también disfruto del tiempo solo.\nc) Me encanta colaborar con personas de diferentes antecedentes.\nd) Prefiero trabajar de manera independiente.\ne) Me siento cómodo trabajando en equipo para resolver problemas complejos.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -289,7 +320,7 @@ const flowOctavaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowNovenaPregunta);
+      return gotoFlow(flowNovenaPregunta);
     } else {
       return fallBack("Indica, por favor, tu selección entre: a, b, c, d o e.");
     }
@@ -300,7 +331,11 @@ const flowNovenaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Qué aspecto te atrae más en una carrera?*\n\na) Oportunidades para tomar decisiones empresariales importantes.\nb) La posibilidad de dar vida a tus ideas a través del diseño.\nc) La oportunidad de comprender y conectar con diversas culturas.\nd) La capacidad de contribuir al avance de la medicina y la salud.\ne) La oportunidad de trabajar con tecnología innovadora.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -319,7 +354,7 @@ const flowNovenaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerRespuestaAleatoria());
 
-      return await gotoFlow(flowDecimaPregunta);
+      return gotoFlow(flowDecimaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -330,7 +365,11 @@ const flowDecimaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Cómo te imaginas a ti mismo/a en el futuro?*\n\na) Siendo un líder en el mundo empresarial.\nb) Siendo un arquitecto o diseñador reconocido.\nc) Contribuyendo a la comprensión intercultural y social.\nd) Trabajando en investigaciones científicas de vanguardia.\ne) Desarrollando soluciones tecnológicas para desafíos actuales.",
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
-    state.update({ phone: ctx.from, name: ctx.pushName, respuesta: ctx.body });
+    await state.update({
+      phone: ctx.from,
+      name: ctx.pushName,
+      respuesta: ctx.body,
+    });
     const currentState = state.getMyState();
     let respuesta = currentState.respuesta.toLowerCase();
 
@@ -351,7 +390,7 @@ const flowDecimaPregunta = addKeyword(EVENTS.ACTION).addAnswer(
 
       await flowDynamic(obtenerMensajeAleatorio());
 
-      return await gotoFlow(flowConclusion);
+      return gotoFlow(flowConclusion);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
     }
@@ -434,7 +473,7 @@ const flowConclusion = addKeyword(EVENTS.ACTION)
     "Para obtener más detalles sobre las carreras, te invitamos a hacer clic en el siguiente enlace.\n\nhttps://www.ups.edu.ec/oferta-academica",
     null,
     async (_, { endFlow }) => {
-      return await endFlow(
+      return endFlow(
         "¡Gracias por tu visita! Espero que esta información te haya sido útil y te ayude a encontrar la carrera que mejor se adapte a ti."
       );
     }
