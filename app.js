@@ -15,6 +15,8 @@ const {
 } = require("./services/Response-Ramdon");
 
 let RESPUESTAS_TEST = {};
+let telefonos = [];
+let ganadores = [];
 
 const flowPrincipal = addKeyword(EVENTS.WELCOME)
   .addAction(async (ctx, { flowDynamic, state }) => {
@@ -56,7 +58,7 @@ const flowPrincipal = addKeyword(EVENTS.WELCOME)
 const flowPrimerPregunta = addKeyword(EVENTS.ACTION).addAnswer(
   "*¿Qué tipo de actividades te resultan más interesantes?*\n\na) Trabajar con números y análisis financiero.\nb) Diseñar edificios y espacios creativos.\nc) Investigar sobre diferentes culturas y sociedades.\nd) Realizar experimentos en un laboratorio.\ne) Programar y resolver problemas tecnológicos.",
   { capture: true },
-  async (ctx, { flowDynamic, gotoFlow, fallBack, state }) => {
+  async (ctx, { flowDynamic, gotoFlow, fallBack, state, provider }) => {
     await state.update({
       phone: ctx.from,
       name: ctx.pushName,
@@ -72,6 +74,9 @@ const flowPrimerPregunta = addKeyword(EVENTS.ACTION).addAnswer(
       respuesta === "d" ||
       respuesta === "e"
     ) {
+      // Aquí, 'numero' debería ser reemplazado por el número de teléfono actual a agregar
+      agregarTelefono(numero);
+
       RESPUESTAS_TEST[currentState.phone] = {
         ...RESPUESTAS_TEST[currentState.phone],
         Pregunta_1: "¿Qué tipo de actividades te resultan más interesantes?",
@@ -83,6 +88,38 @@ const flowPrimerPregunta = addKeyword(EVENTS.ACTION).addAnswer(
       return gotoFlow(flowSegundaPregunta);
     } else {
       return fallBack(obtenerSolicitudAleatoria());
+    }
+
+    function agregarTelefono(numero) {
+      telefonos.push(numero);
+      if (telefonos.length === 10) {
+        realizarSorteo();
+      }
+    }
+
+    async function realizarSorteo() {
+      let ganador;
+      do {
+        const indiceAleatorio = Math.floor(Math.random() * telefonos.length);
+        ganador = telefonos[indiceAleatorio];
+      } while (ganadores.includes(ganador)); // Evitar repetir ganadores
+
+      console.log(`El ganador es: ${ganador}`);
+
+      try {
+        const EnviarRevision = await provider.sendText(
+          ganador + "@s.whatsapp.net",
+          "¡Felicitaciones! Has ganado un premio sorpresa. Por favor, anda al stand para reclamar tu premio, debes mostrar este mensaje."
+        );
+        console.log(EnviarRevision);
+      } catch (error) {
+        console.error("Error al enviar mensaje al ganador:", error);
+      }
+
+      ganadores.push(ganador);
+      console.log("[TELEFONOS]:", telefonos);
+      // Reiniciar el array de teléfonos para el siguiente sorteo
+      telefonos = [];
     }
   }
 );
